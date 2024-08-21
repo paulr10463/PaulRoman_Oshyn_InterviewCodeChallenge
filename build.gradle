@@ -1,0 +1,35 @@
+plugins {
+    id "jacoco"
+    id "java-library"
+}
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+jacoco {
+    toolVersion = '0.8.7' // Use a newer version if needed
+}
+
+jacocoTestReport {
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: ['snmaddula/sboot/crud/App.class', 'snmaddula/sboot/util/**'])
+        }))
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.12'
+}
+
+test {
+    testLogging.showStandardStreams = true
+    finalizedBy jacocoTestReport
+}
